@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   LayoutGrid, ArrowLeft, Building2, RefreshCw, BarChart2, Settings,
   Search, Hourglass, Sparkles, TrendingUp, TrendingDown,
   SlidersHorizontal, List, LayoutDashboard, MoreHorizontal,
   Zap, Check, Calendar, Mail, ArrowUpRight, ChevronDown,
+  Users, GitBranch, Activity, Download, Upload, Webhook, Bot,
+  LogOut, User, X,
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -127,18 +129,144 @@ const neoSm   = { background:'var(--surface)', borderRadius:14, boxShadow:'var(-
 const neoPill = { background:'var(--surface)', borderRadius:999, boxShadow:'var(--shadow-pill)'} as React.CSSProperties;
 const neoIn   = { background:'var(--surface)', borderRadius:999, boxShadow:'var(--shadow-in)' } as React.CSSProperties;
 
+// ─── ToolsDropdown ────────────────────────────────────────────────────────────
+
+const TOOLS = [
+  { icon: <LayoutDashboard size={16} strokeWidth={1.6}/>, label: 'Financial Overview', sub: 'Overblik · DKK', href: '/invoice' },
+  { icon: <Users           size={16} strokeWidth={1.6}/>, label: 'CRM',                sub: 'Contacts & leads', href: '/crm' },
+  { icon: <GitBranch       size={16} strokeWidth={1.6}/>, label: 'Pipeline',           sub: 'Sales stages',    href: '/crm/pipeline' },
+  { icon: <Activity        size={16} strokeWidth={1.6}/>, label: 'Actividades',         sub: 'Tasks & calls',   href: '/crm/activities' },
+  { icon: <Download        size={16} strokeWidth={1.6}/>, label: 'Exportar CSV',       sub: 'All contacts',    href: '/api/crm/contacts?format=csv' },
+  { icon: <Upload          size={16} strokeWidth={1.6}/>, label: 'Importar CSV',       sub: 'Bulk import',     href: '/crm/contacts' },
+  { icon: <Webhook         size={16} strokeWidth={1.6}/>, label: 'Webhook',            sub: 'Copy endpoint',   href: null },
+  { icon: <Bot             size={16} strokeWidth={1.6}/>, label: 'AI Advisor',         sub: 'Analyze books',   href: null },
+];
+
+function ToolsDropdown({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [onClose]);
+
+  function handleTool(t: typeof TOOLS[0]) {
+    onClose();
+    if (t.href === null) {
+      if (t.label === 'Webhook') {
+        const url = `${window.location.origin}/api/crm/webhook`;
+        navigator.clipboard.writeText(url).then(() => toast('Webhook URL copiado ✓'));
+      } else {
+        toast('AI Advisor: analizando tus libros…');
+      }
+    } else {
+      router.push(t.href);
+    }
+  }
+
+  return (
+    <div ref={ref} style={{ ...neo, position:'absolute', top:'calc(100% + 8px)', left:0, width:260, borderRadius:20, padding:'10px 8px', zIndex:200 }}>
+      <div style={{ padding:'6px 10px 8px', fontSize:10, fontWeight:700, letterSpacing:'.08em', textTransform:'uppercase', color:'var(--ink-3)' }}>Herramientas del sistema</div>
+      {TOOLS.map(t => (
+        <button key={t.label} onClick={() => handleTool(t)} style={{ display:'flex', alignItems:'center', gap:12, width:'100%', padding:'9px 10px', borderRadius:12, border:0, background:'transparent', cursor:'pointer', textAlign:'left', fontFamily:'inherit', transition:'background .12s' }}
+          onMouseEnter={e => (e.currentTarget.style.background='rgba(0,0,0,.04)')}
+          onMouseLeave={e => (e.currentTarget.style.background='transparent')}
+        >
+          <div style={{ width:34, height:34, borderRadius:10, background:'var(--surface)', boxShadow:'var(--shadow-sm)', display:'flex', alignItems:'center', justifyContent:'center', flex:'none', color:'var(--ink-2)' }}>{t.icon}</div>
+          <div style={{ display:'flex', flexDirection:'column', lineHeight:1.2, minWidth:0 }}>
+            <span style={{ fontSize:13, fontWeight:600, color:'var(--ink)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{t.label}</span>
+            <span style={{ fontSize:11, color:'var(--ink-3)' }}>{t.sub}</span>
+          </div>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ─── ProfileDropdown ──────────────────────────────────────────────────────────
+
+function ProfileDropdown({ onClose }: { onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handler(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    }
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [onClose]);
+
+  return (
+    <div ref={ref} style={{ ...neo, position:'absolute', top:'calc(100% + 8px)', right:0, width:280, borderRadius:20, padding:'6px 0 8px', zIndex:200 }}>
+      {/* Avatar + name */}
+      <div style={{ display:'flex', alignItems:'center', gap:12, padding:'14px 16px 12px' }}>
+        <div style={{ width:44, height:44, borderRadius:999, background:'radial-gradient(circle at 35% 35%,#ffd5b3,#c98a5c 60%,#6e3a1a)', boxShadow:'var(--shadow-pill)', position:'relative', overflow:'hidden', flex:'none' }}>
+          <svg viewBox="0 0 42 42" width="44" height="44" style={{ position:'absolute', inset:0 }}>
+            <ellipse cx="21" cy="34" rx="11" ry="8" fill="#3a2418" opacity=".55"/>
+            <circle cx="16" cy="20" r="1.4" fill="#1c1208"/><circle cx="26" cy="20" r="1.4" fill="#1c1208"/>
+            <path d="M16 26q5 4 10 0" stroke="#3a2418" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <div style={{ flex:1, minWidth:0 }}>
+          <div style={{ fontWeight:700, fontSize:14, color:'var(--ink)', letterSpacing:'-.01em' }}>Orestes Baratutí</div>
+          <div style={{ fontSize:11, color:'var(--ink-3)', marginTop:1 }}>oreste2b@gmail.com</div>
+        </div>
+        <button onClick={onClose} style={{ width:28, height:28, borderRadius:999, border:0, background:'transparent', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', color:'var(--ink-3)' }}><X size={14} strokeWidth={1.7}/></button>
+      </div>
+      {/* Divider */}
+      <div style={{ height:1, background:'var(--line)', margin:'0 12px 6px' }}/>
+      {/* Info rows */}
+      {[
+        { label:'Plan',         value:'Pro' },
+        { label:'Empresa',      value:'Dinero Intelligence' },
+        { label:'Año fiscal',   value:'2026' },
+        { label:'Moms vence',   value:'01 Jun 2026' },
+      ].map(r => (
+        <div key={r.label} style={{ display:'flex', justifyContent:'space-between', padding:'6px 16px', fontSize:12 }}>
+          <span style={{ color:'var(--ink-3)', fontWeight:500 }}>{r.label}</span>
+          <span style={{ color:'var(--ink)', fontWeight:600 }}>{r.value}</span>
+        </div>
+      ))}
+      {/* Dinero.dk status */}
+      <div style={{ margin:'8px 12px', padding:'8px 12px', borderRadius:12, background:'rgba(155,232,169,.35)', display:'flex', alignItems:'center', gap:8 }}>
+        <div style={{ width:8, height:8, borderRadius:999, background:'#1f6a3a' }}/>
+        <span style={{ fontSize:11, fontWeight:600, color:'#1f6a3a' }}>Conectado a Dinero.dk</span>
+      </div>
+      {/* Divider */}
+      <div style={{ height:1, background:'var(--line)', margin:'6px 12px' }}/>
+      {/* Actions */}
+      <button onClick={() => { onClose(); toast('Opening settings…'); }} style={{ display:'flex', alignItems:'center', gap:10, width:'100%', padding:'9px 16px', border:0, background:'transparent', cursor:'pointer', fontSize:13, fontFamily:'inherit', color:'var(--ink)', fontWeight:500 }}
+        onMouseEnter={e => (e.currentTarget.style.background='rgba(0,0,0,.04)')}
+        onMouseLeave={e => (e.currentTarget.style.background='transparent')}
+      ><User size={15} strokeWidth={1.6}/> Configuración de cuenta</button>
+      <button onClick={() => { onClose(); toast('Cerrando sesión…'); }} style={{ display:'flex', alignItems:'center', gap:10, width:'100%', padding:'9px 16px', border:0, background:'transparent', cursor:'pointer', fontSize:13, fontFamily:'inherit', color:'#c4502f', fontWeight:500 }}
+        onMouseEnter={e => (e.currentTarget.style.background='rgba(196,80,47,.06)')}
+        onMouseLeave={e => (e.currentTarget.style.background='transparent')}
+      ><LogOut size={15} strokeWidth={1.6}/> Cerrar sesión</button>
+    </div>
+  );
+}
+
 // ─── InvoiceHeader ────────────────────────────────────────────────────────────
 
-function InvoiceHeader({ onSync, syncing, onAction, onApps, onBack, onSearch }: {
+function InvoiceHeader({ onSync, syncing, onAction, onBack, onSearch, showTools, setShowTools, showProfile, setShowProfile }: {
   onSync: () => void; syncing: boolean; onAction: (k: string) => void;
-  onApps: () => void; onBack: () => void; onSearch: () => void;
+  onBack: () => void; onSearch: () => void;
+  showTools: boolean; setShowTools: (v: boolean) => void;
+  showProfile: boolean; setShowProfile: (v: boolean) => void;
 }) {
   return (
     <header style={{ display:'flex', alignItems:'center', gap:18, justifyContent:'space-between', padding:'10px 6px' }}>
       <div style={{ display:'flex', alignItems:'center', gap:18 }}>
         <div style={{ ...neoPill, width:48, height:48, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, fontSize:18, letterSpacing:'-.02em' }}>dkr</div>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-          <button className="inv-btn" onClick={onApps} style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Apps"><LayoutGrid size={18} strokeWidth={1.6}/></button>
+          {/* Tools button with dropdown */}
+          <div style={{ position:'relative' }}>
+            <button className="inv-btn" onClick={() => { setShowTools(!showTools); setShowProfile(false); }} style={{ width:42, height:42, padding:0, justifyContent:'center', boxShadow: showTools ? 'var(--shadow-in)' : undefined }} aria-label="Apps"><LayoutGrid size={18} strokeWidth={1.6}/></button>
+            {showTools && <ToolsDropdown onClose={() => setShowTools(false)}/>}
+          </div>
           <button className="inv-btn" onClick={onBack} style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Back"><ArrowLeft size={18} strokeWidth={1.6}/></button>
           <div className="inv-btn" style={{ paddingLeft:14, cursor:'default' }}>
             <Building2 size={18} strokeWidth={1.6}/>
@@ -157,12 +285,16 @@ function InvoiceHeader({ onSync, syncing, onAction, onApps, onBack, onSearch }: 
           <button className="inv-btn" onClick={() => onAction('settings')}><Settings size={18} strokeWidth={1.6}/> Settings</button>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-          <div style={{ width:42, height:42, borderRadius:999, background:'radial-gradient(circle at 35% 35%,#ffd5b3,#c98a5c 60%,#6e3a1a)', boxShadow:'var(--shadow-pill)', position:'relative', overflow:'hidden' }}>
-            <svg viewBox="0 0 42 42" width="42" height="42" style={{ position:'absolute', inset:0 }}>
-              <ellipse cx="21" cy="34" rx="11" ry="8" fill="#3a2418" opacity=".55"/>
-              <circle cx="16" cy="20" r="1.4" fill="#1c1208"/><circle cx="26" cy="20" r="1.4" fill="#1c1208"/>
-              <path d="M16 26q5 4 10 0" stroke="#3a2418" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
-            </svg>
+          {/* Avatar with profile dropdown */}
+          <div style={{ position:'relative' }}>
+            <button onClick={() => { setShowProfile(!showProfile); setShowTools(false); }} style={{ width:42, height:42, borderRadius:999, background:'radial-gradient(circle at 35% 35%,#ffd5b3,#c98a5c 60%,#6e3a1a)', boxShadow: showProfile ? 'var(--shadow-in)' : 'var(--shadow-pill)', position:'relative', overflow:'hidden', border:0, cursor:'pointer', padding:0 }} aria-label="Profile">
+              <svg viewBox="0 0 42 42" width="42" height="42" style={{ position:'absolute', inset:0 }}>
+                <ellipse cx="21" cy="34" rx="11" ry="8" fill="#3a2418" opacity=".55"/>
+                <circle cx="16" cy="20" r="1.4" fill="#1c1208"/><circle cx="26" cy="20" r="1.4" fill="#1c1208"/>
+                <path d="M16 26q5 4 10 0" stroke="#3a2418" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
+              </svg>
+            </button>
+            {showProfile && <ProfileDropdown onClose={() => setShowProfile(false)}/>}
           </div>
           <button className="inv-btn" onClick={onSearch} style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Search"><Search size={18} strokeWidth={1.6}/></button>
         </div>
@@ -480,6 +612,8 @@ export default function InvoiceDashboard() {
   const [showActivity, setShowActivity] = useState(true);
   const [resultat, setResultat]         = useState(-4502.25);
   const [syncing, setSyncing]           = useState(false);
+  const [showTools, setShowTools]       = useState(false);
+  const [showProfile, setShowProfile]   = useState(false);
 
   const set = useCallback((k: string, v: unknown) => {
     if (k==='palette')      setPalette(v as Palette);
@@ -501,9 +635,12 @@ export default function InvoiceDashboard() {
           onSync={onSync}
           syncing={syncing}
           onAction={k => toast(k==='reports' ? 'Opening reports…' : 'Opening settings…')}
-          onApps={() => router.push('/crm')}
           onBack={() => router.back()}
           onSearch={() => { const el = document.getElementById('inv-search') as HTMLInputElement | null; el?.focus(); el?.scrollIntoView({ behavior:'smooth', block:'center' }); }}
+          showTools={showTools}
+          setShowTools={setShowTools}
+          showProfile={showProfile}
+          setShowProfile={setShowProfile}
         />
         <InvoiceSummary resultat={resultat} onAskAI={() => toast('AI Advisor: analyzing your books…')}/>
         <div style={{ display:'flex', gap:18, marginTop:20, alignItems:'flex-start' }}>
