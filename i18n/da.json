@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "overblik": "Overblik",
+    "fakturaer": "Fakturaer",
+    "kontakter": "Kontakter",
+    "rapporter": "Rapporter",
+    "indstillinger": "Indstillinger"
+  },
+  "dashboard": {
+    "financialOverview": "Finansielt overblik",
+    "syncDinero": "Synkroniser Dinero.dk",
+    "syncing": "Synkroniserer…",
+    "askAiAdvisor": "Spørg AI-rådgiver",
+    "resultat": "Resultat",
+    "belowBreakEven": "Under break-even",
+    "onTrack": "På rette spor",
+    "fiscalYear": "Regnskabsår",
+    "vatDue": "Moms forfalder",
+    "aiStatus": "AI-status",
+    "analyzingDiscrepancies": "Analyserer uoverensstemmelser",
+    "momsIn": "Moms om",
+    "days": "dage",
+    "revenue": "Omsætning",
+    "expenses": "Udgifter",
+    "taxReserve": "Momsreserve",
+    "topExpenseCategories": "Top udgiftskategorier",
+    "aprilKonti": "April · Konti fra Dinero.dk",
+    "active": "aktive",
+    "searchPlaceholder": "Søg i transaktioner eller konti",
+    "priorityInsights": "Prioriterede indsigter",
+    "updatedMinutesAgo": "opdateret {{n}} min. siden",
+    "allCaughtUp": "Alt er i orden ✨",
+    "aiIntelligence": "AI-intelligens",
+    "poweredBy": "Drevet af Dinero AI · live"
+  },
+  "insights": {
+    "filterAll": "Alle",
+    "filterAlerts": "Advarsler",
+    "filterSuggestions": "Forslag",
+    "filterDone": "Udført"
+  },
+  "auth": {
+    "loginWithDinero": "Log ind med Dinero.dk",
+    "loggingIn": "Logger ind…",
+    "logout": "Log ud",
+    "sessionExpired": "Din session er udløbet. Log venligst ind igen.",
+    "loginRequired": "Log ind for at fortsætte",
+    "authError": "Godkendelsesfejl"
+  },
+  "errors": {
+    "network": "Netværksfejl — tjek din forbindelse og prøv igen.",
+    "unauthorized": "Ikke autoriseret. Log venligst ind igen.",
+    "rateLimited": "For mange anmodninger. Prøv igen om {{seconds}} sekunder.",
+    "server": "Serverfejl ({{code}}). Prøv igen senere.",
+    "decode": "Uventet svar fra serveren. Kontakt support.",
+    "generic": "Noget gik galt. Prøv igen.",
+    "retrying": "Prøver igen…"
+  },
+  "categories": {
+    "kørselsgodtgørelse": "Kørselsgodtgørelse",
+    "husleje": "Husleje",
+    "varekøb": "Varekøb",
+    "unreconciled": "Uafstemte",
+    "repræsentation": "Repræsentation",
+    "kontorartikler": "Kontorartikler"
+  },
+  "common": {
+    "dkk": "DKK",
+    "loading": "Indlæser…",
+    "retry": "Prøv igen",
+    "cancel": "Annuller",
+    "save": "Gem",
+    "close": "Luk",
+    "reports": "Rapporter",
+    "settings": "Indstillinger"
+  }
+}

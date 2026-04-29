@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "overblik": "Resumen",
+    "fakturaer": "Facturas",
+    "kontakter": "Contactos",
+    "rapporter": "Informes",
+    "indstillinger": "Ajustes"
+  },
+  "dashboard": {
+    "financialOverview": "Resumen financiero",
+    "syncDinero": "Sincronizar Dinero.dk",
+    "syncing": "Sincronizando…",
+    "askAiAdvisor": "Preguntar al asesor IA",
+    "resultat": "Resultado",
+    "belowBreakEven": "Por debajo del punto de equilibrio",
+    "onTrack": "En buen camino",
+    "fiscalYear": "Año fiscal",
+    "vatDue": "Vencimiento IVA",
+    "aiStatus": "Estado IA",
+    "analyzingDiscrepancies": "Analizando discrepancias",
+    "momsIn": "Moms en",
+    "days": "días",
+    "revenue": "Ingresos",
+    "expenses": "Gastos",
+    "taxReserve": "Reserva fiscal (Moms)",
+    "topExpenseCategories": "Principales categorías de gasto",
+    "aprilKonti": "Abril · Cuentas desde Dinero.dk",
+    "active": "activas",
+    "searchPlaceholder": "Buscar transacciones o cuentas",
+    "priorityInsights": "Análisis prioritarios",
+    "updatedMinutesAgo": "actualizado hace {{n}} min.",
+    "allCaughtUp": "Todo al día ✨",
+    "aiIntelligence": "Inteligencia IA",
+    "poweredBy": "Con tecnología de Dinero AI · en vivo"
+  },
+  "insights": {
+    "filterAll": "Todo",
+    "filterAlerts": "Alertas",
+    "filterSuggestions": "Sugerencias",
+    "filterDone": "Completado"
+  },
+  "auth": {
+    "loginWithDinero": "Iniciar sesión con Dinero.dk",
+    "loggingIn": "Iniciando sesión…",
+    "logout": "Cerrar sesión",
+    "sessionExpired": "Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.",
+    "loginRequired": "Inicia sesión para continuar",
+    "authError": "Error de autenticación"
+  },
+  "errors": {
+    "network": "Error de red — comprueba tu conexión e inténtalo de nuevo.",
+    "unauthorized": "No autorizado. Por favor, inicia sesión de nuevo.",
+    "rateLimited": "Demasiadas solicitudes. Inténtalo de nuevo en {{seconds}} segundos.",
+    "server": "Error del servidor ({{code}}). Inténtalo más tarde.",
+    "decode": "Respuesta inesperada del servidor. Contacta con soporte.",
+    "generic": "Algo salió mal. Inténtalo de nuevo.",
+    "retrying": "Reintentando…"
+  },
+  "categories": {
+    "kørselsgodtgørelse": "Kørselsgodtgørelse",
+    "husleje": "Husleje",
+    "varekøb": "Varekøb",
+    "unreconciled": "Sin conciliar",
+    "repræsentation": "Repræsentation",
+    "kontorartikler": "Material de oficina"
+  },
+  "common": {
+    "dkk": "DKK",
+    "loading": "Cargando…",
+    "retry": "Reintentar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "close": "Cerrar",
+    "reports": "Informes",
+    "settings": "Ajustes"
+  }
+}
