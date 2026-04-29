@@ -1,3 +1,5 @@
+export const metadata = { title: 'Actividades' };
+
 import { db } from '@/lib/db';
 import { activities, contacts } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';

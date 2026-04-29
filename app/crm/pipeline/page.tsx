@@ -1,3 +1,5 @@
+export const metadata = { title: 'Pipeline' };
+
 import { db } from '@/lib/db';
 import { deals, contacts, pipelineStages } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';

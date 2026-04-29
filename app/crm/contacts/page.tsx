@@ -1,3 +1,5 @@
+export const metadata = { title: 'Contactos' };
+
 import { ContactsTable } from '@/components/crm/contacts/ContactsTable';
 
 export const dynamic = 'force-dynamic';

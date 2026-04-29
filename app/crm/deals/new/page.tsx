@@ -1,3 +1,5 @@
+export const metadata = { title: 'Nuevo negocio' };
+
 import { DealForm } from '@/components/crm/deals/DealForm';
 
 export default function NewDealPage() {

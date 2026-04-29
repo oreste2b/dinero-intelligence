@@ -1,3 +1,5 @@
+export const metadata = { title: 'Nuevo contacto' };
+
 import { ContactForm } from '@/components/crm/contacts/ContactForm';
 
 export default function NewContactPage() {

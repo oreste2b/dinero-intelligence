@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /invoice
+
+# CRM is an internal tool — not meant for indexing
+Disallow: /crm
+Disallow: /api/
+
+Sitemap: https://dinero-intelligence.dk/sitemap.xml

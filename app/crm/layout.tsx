@@ -1,4 +1,10 @@
+import type { Metadata } from 'next';
 import { CRMSidebar } from '@/components/crm/layout/CRMSidebar';
+
+// CRM is an authenticated internal tool — never index these routes
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function CRMLayout({ children }: { children: React.ReactNode }) {
   return (

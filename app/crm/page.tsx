@@ -1,3 +1,5 @@
+export const metadata = { title: 'CRM Dashboard' };
+
 import { db } from '@/lib/db';
 import { contacts, deals, pipelineStages, activities } from '@/lib/db/schema';
 import { eq } from 'drizzle-orm';
