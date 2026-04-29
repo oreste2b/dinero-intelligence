@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   LayoutGrid, ArrowLeft, Building2, RefreshCw, BarChart2, Settings,
   Search, Hourglass, Sparkles, TrendingUp, TrendingDown,
@@ -128,16 +129,17 @@ const neoIn   = { background:'var(--surface)', borderRadius:999, boxShadow:'var(
 
 // ─── InvoiceHeader ────────────────────────────────────────────────────────────
 
-function InvoiceHeader({ onSync, syncing, onAction }: {
+function InvoiceHeader({ onSync, syncing, onAction, onApps, onBack, onSearch }: {
   onSync: () => void; syncing: boolean; onAction: (k: string) => void;
+  onApps: () => void; onBack: () => void; onSearch: () => void;
 }) {
   return (
     <header style={{ display:'flex', alignItems:'center', gap:18, justifyContent:'space-between', padding:'10px 6px' }}>
       <div style={{ display:'flex', alignItems:'center', gap:18 }}>
         <div style={{ ...neoPill, width:48, height:48, display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, fontSize:18, letterSpacing:'-.02em' }}>dkr</div>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-          <button className="inv-btn" style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Apps"><LayoutGrid size={18} strokeWidth={1.6}/></button>
-          <button className="inv-btn" style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Back"><ArrowLeft size={18} strokeWidth={1.6}/></button>
+          <button className="inv-btn" onClick={onApps} style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Apps"><LayoutGrid size={18} strokeWidth={1.6}/></button>
+          <button className="inv-btn" onClick={onBack} style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Back"><ArrowLeft size={18} strokeWidth={1.6}/></button>
           <div className="inv-btn" style={{ paddingLeft:14, cursor:'default' }}>
             <Building2 size={18} strokeWidth={1.6}/>
             <span style={{ fontSize:15, fontWeight:600, letterSpacing:'-.01em' }}>Overblik</span>
@@ -162,7 +164,7 @@ function InvoiceHeader({ onSync, syncing, onAction }: {
               <path d="M16 26q5 4 10 0" stroke="#3a2418" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
             </svg>
           </div>
-          <button className="inv-btn" style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Search"><Search size={18} strokeWidth={1.6}/></button>
+          <button className="inv-btn" onClick={onSearch} style={{ width:42, height:42, padding:0, justifyContent:'center' }} aria-label="Search"><Search size={18} strokeWidth={1.6}/></button>
         </div>
       </div>
     </header>
@@ -325,7 +327,7 @@ function InvoiceLines() {
         </div>
         <div style={{ ...neoIn, flex:1, display:'flex', alignItems:'center', gap:10, padding:'10px 18px' }}>
           <Search size={18} strokeWidth={1.6} color="var(--ink-3)"/>
-          <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search transactions or accounts" style={{ flex:1, border:0, outline:'none', background:'transparent', fontSize:14, fontFamily:'inherit', color:'var(--ink)' }}/>
+          <input id="inv-search" value={q} onChange={e => setQ(e.target.value)} placeholder="Search transactions or accounts" style={{ flex:1, border:0, outline:'none', background:'transparent', fontSize:14, fontFamily:'inherit', color:'var(--ink)' }}/>
         </div>
         <div style={{ ...neoIn, display:'flex', padding:5, gap:4 }}>
           {views.map(o => (
@@ -353,7 +355,7 @@ function InsightCard({ a }: { a: Activity }) {
           <Icon size={18} strokeWidth={1.6} color={a.iconColor}/>
         </div>
         <span style={{ fontSize:10, fontWeight:700, letterSpacing:'.08em', textTransform:'uppercase', color:a.iconColor, padding:'3px 9px', borderRadius:999, background:'rgba(255,255,255,.7)' }}>{a.tag}</span>
-        <button aria-label="open" style={{ marginLeft:'auto', width:28, height:28, borderRadius:999, border:0, background:'rgba(255,255,255,.7)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
+        <button aria-label="open" onClick={() => toast(a.cta)} style={{ marginLeft:'auto', width:28, height:28, borderRadius:999, border:0, background:'rgba(255,255,255,.7)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>
           <ArrowUpRight size={14} strokeWidth={1.7}/>
         </button>
       </div>
@@ -361,7 +363,7 @@ function InsightCard({ a }: { a: Activity }) {
         <div style={{ fontWeight:700, fontSize:15, letterSpacing:'-.01em', color:'var(--ink)', lineHeight:1.25 }}>{a.title}</div>
         <div style={{ fontSize:12, color:'var(--ink-2)', marginTop:6, lineHeight:1.45 }}>{a.sub}</div>
       </div>
-      <div style={{ display:'inline-flex', alignSelf:'flex-start', marginTop:4, padding:'7px 12px', borderRadius:999, background:'rgba(20,24,28,.86)', color:'#fff', fontSize:11, fontWeight:600, cursor:'pointer', border:0, fontFamily:'inherit' }}>{a.cta} →</div>
+      <div onClick={() => toast(a.cta)} style={{ display:'inline-flex', alignSelf:'flex-start', marginTop:4, padding:'7px 12px', borderRadius:999, background:'rgba(20,24,28,.86)', color:'#fff', fontSize:11, fontWeight:600, cursor:'pointer', border:0, fontFamily:'inherit' }}>{a.cta} →</div>
     </div>
   );
 }
@@ -472,6 +474,7 @@ function TweaksPanel({ tweaks, set }: {
 // ─── Root ─────────────────────────────────────────────────────────────────────
 
 export default function InvoiceDashboard() {
+  const router = useRouter();
   const [palette, setPalette]           = useState<Palette>('mint');
   const [density, setDensity]           = useState<Density>('comfortable');
   const [showActivity, setShowActivity] = useState(true);
@@ -494,7 +497,14 @@ export default function InvoiceDashboard() {
   return (
     <div className="inv-root" data-palette={palette} data-density={density}>
       <div style={{ maxWidth:1480, margin:'0 auto', padding:'26px 28px 100px' }}>
-        <InvoiceHeader onSync={onSync} syncing={syncing} onAction={k => toast(k==='reports' ? 'Opening reports…' : 'Opening settings…')}/>
+        <InvoiceHeader
+          onSync={onSync}
+          syncing={syncing}
+          onAction={k => toast(k==='reports' ? 'Opening reports…' : 'Opening settings…')}
+          onApps={() => router.push('/crm')}
+          onBack={() => router.back()}
+          onSearch={() => { const el = document.getElementById('inv-search') as HTMLInputElement | null; el?.focus(); el?.scrollIntoView({ behavior:'smooth', block:'center' }); }}
+        />
         <InvoiceSummary resultat={resultat} onAskAI={() => toast('AI Advisor: analyzing your books…')}/>
         <div style={{ display:'flex', gap:18, marginTop:20, alignItems:'flex-start' }}>
           <InvoiceLines/>
